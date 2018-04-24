@@ -18,17 +18,55 @@ app.get('/cool', function(request, response) {
   response.send(cool());
 });
 
-var pg = require('pg');
-var pool = new pg.Pool()
-app.get('/db', function (request, response) {
-    pool.connect(process.env.DATABASE_URL, function(err, client, done) {
-        client.query('SELECT * FROM test_table', function(err, result) {
-            done();
-            if (err)
-            { console.error(err); response.send("Error " + err); }
-            else
-            { response.render('pages/db', {results: result.rows} ); }
+const Pool = require('pg');
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+});
+/*
+app.get('/db', async (req, res) => {
+    try {
+        const client = await pool.connect()
+        const result = await client.query('SELECT * FROM test_table');
+        res.render('pages/db', result);
+        client.release();
+        }
+        catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+        }
+});
+*/
+var express = require('express');
+var mongodb = require('mongodb');
+var router = express.Router();
+/* GET home page. */
+router.get('/', function(req, res, next)
+{   res.render('index', { title: 'Express' }); });
+module.exports = router;
+//**************************************************************************
+// ***** mongodb get all of the Routes in Routes collection where frequence>=1
+//      and sort by the name of the route.  Render information in the views/pages/mongodb.ejs
+//
+var mongoRouteUrl = 'mongodb://heroku_pmk6n54s:penh0a964unc8citdi3c1943cv@ds153869.mlab.com:53869/heroku_pmk6n54s';
+router.get('/mongodb', function (request, response)
+{
+    mongodb.MongoClient.connect(mongoRouteUrl, function(err, client) {
+        mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, db) {  // works with mongodb v2 but not v3
+            if (err) throw err;         //get collection of routes
+            var db = client.db('heroku_pmk6n54s');  // in v3 we need to get the db from the client
+            var Routes = db.collection('Routes');         //get all Routes with frequency >=1
+            Routes.find({frequency: {$gte: 0}}).sort({name: 1}).toArray(function (err, docs) {
+                if (err) throw err;
+                response.render('mongodb', {results: docs});
+            });          //close connection when your app is terminating.         //
+            db.close(function (err) {
+                client.close(function (err) {
+                    if (err) throw err;
+                });
+            });//end of connect
         });
+        //end app.get
     });
 });
 
