@@ -14,16 +14,13 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/cool', function(request, response) {
-  response.send(cool());
-});
-
+/*
 const Pool = require('pg');
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: true
 });
-/*
+
 app.get('/db', async (req, res) => {
     try {
         const client = await pool.connect()
@@ -37,7 +34,7 @@ app.get('/db', async (req, res) => {
         }
 });
 */
-var express = require('express');
+//var express = require('express');
 var mongodb = require('mongodb');
 var router = express.Router();
 /* GET home page. */
