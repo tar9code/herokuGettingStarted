@@ -36,16 +36,19 @@ app.get('/db', async (req, res) => {
 */
 //var express = require('express');
 var mongodb = require('mongodb');
-var router = express.Router();
+//var router = express.Router();
 /* GET home page. */
 /*router.get('/', function(req, res, next)
 {   res.render('index', { title: 'Express' }); });*/
-module.exports = router;
+
+
+//module.exports = router;
 //**************************************************************************
 // ***** mongodb get all of the Routes in Routes collection where frequence>=1
 //      and sort by the name of the route.  Render information in the views/pages/mongodb.ejs
 //
 //var mongoRouteUrl = 'mongodb://heroku_pmk6n54s:penh0a964unc8citdi3c1943cv@ds153869.mlab.com:53869/heroku_pmk6n54s';
+/*
 var mongoRouteUrl = 'mongodb://heroku_nhr73h2j:m925ongoDB@ds149279.mlab.com:49279/heroku_nhr73h2j';
 router.get('/mongodb', function (request, response)
 {
@@ -67,7 +70,7 @@ router.get('/mongodb', function (request, response)
         //end app.get
     });
 });
-
+*/
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
